@@ -1,26 +1,318 @@
 @import "tailwindcss";
+@import "react-datepicker/dist/react-datepicker.css";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #0b1119;                 /* near‑black industrial background */
+  --card: #111a26;               /* dark panel */
+  --border: #2a3a4e;             /* steel‑grey border */
+  --accent: #2ec4b6;             /* subdued teal/cyan – professional indicator */
+  --text: #f0f4f8;               /* near‑white, slight warmth */
+  --muted: #8899aa;              /* cool grey for labels */
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(160deg, #0f1923 0%, #0b1119 100%);
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.dashboard {
+  min-height: 100vh;
+  padding: 50px 20px;
+}
+
+.dashboard-container {
+  max-width: 1400px;
+  margin: auto;
+}
+
+.hero {
+  margin-bottom: 40px;
+}
+
+.hero h1 {
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.5px;
+}
+
+.hero p {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+}
+
+.main-card,
+.prediction-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);   /* subtle depth, no glow */
+}
+
+.main-card {
+  padding: 32px;
+}
+
+.card-header {
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 28px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid rgba(46, 196, 182, 0.25);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px 24px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group label {
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.input-group input {
+  background: #0b1119;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  color: var(--text);
+  font-size: 0.95rem;
+  transition: border-color 0.15s ease;
+  outline: none;
+}
+
+.input-group input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(46, 196, 182, 0.2);  /* light focus ring */
+}
+
+.predict-btn {
+  grid-column: span 2;
+  margin-top: 12px;
+  border: none;
+  border-radius: 10px;
+  padding: 15px;
+  background: var(--accent);
+  color: #0b1119;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.predict-btn:hover {
+  background: #25b0a3;           /* slightly darker shade, no glow */
+  transform: translateY(-1px);
+}
+
+.prediction-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 350px;
+  text-align: center;
+}
+
+.prediction-label {
+  color: var(--muted);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 8px;
+}
+
+.prediction-value {
+  font-size: 4.5rem;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+  /* no text-shadow – clean, professional */
+}
+
+.prediction-unit {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .predict-btn {
+    grid-column: span 1;
+  }
+
+  .prediction-value {
+    font-size: 3.8rem;
+  }
+}
+
+/* =========================
+   DATE PICKER INPUT
+========================= */
+
+.date-picker {
+  width: 100%;
+  background: #03091c;
+  border: 1px solid #17345d;
+  border-radius: 14px;
+  padding: 14px;
+  color: white;
+  font-size: 1rem;
+  transition: all 0.25s ease;
+}
+
+.date-picker:focus {
+  outline: none;
+  border-color: #16d4c3;
+  box-shadow: 0 0 0 3px rgba(22, 212, 195, 0.15);
+}
+
+/* =========================
+   CALENDAR POPUP
+========================= */
+
+.react-datepicker {
+  background: #071734 !important;
+  border: 1px solid #17345d !important;
+  border-radius: 16px !important;
+  overflow: hidden;
+  color: white !important;
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.4);
+}
+
+/* Header */
+
+.react-datepicker__header {
+  background: #020b23 !important;
+  border-bottom: 1px solid #17345d !important;
+}
+
+/* Month/Year Text */
+
+.react-datepicker__current-month {
+  color: white !important;
+  font-weight: 600;
+}
+
+/* Day Names */
+
+.react-datepicker__day-name {
+  color: #9ca3af !important;
+}
+
+/* Days */
+
+.react-datepicker__day {
+  color: white !important;
+  border-radius: 8px;
+  transition: all 0.15s ease;
+}
+
+/* Hover */
+
+.react-datepicker__day:hover {
+  background: #16d4c3 !important;
+  color: black !important;
+}
+
+/* Selected */
+
+.react-datepicker__day--selected {
+  background: #16d4c3 !important;
+  color: black !important;
+  font-weight: 700;
+}
+
+/* Today's Date */
+
+.react-datepicker__day--today {
+  border: 1px solid #16d4c3;
+}
+
+/* Month & Year Dropdowns */
+
+.react-datepicker__month-select,
+.react-datepicker__year-select {
+  background: #071734;
+  color: white;
+  border: 1px solid #17345d;
+  border-radius: 8px;
+  padding: 4px 8px;
+}
+
+/* Navigation Arrows */
+
+.react-datepicker__navigation-icon::before {
+  border-color: white !important;
+}
+
+/* Outside Month Dates */
+
+.react-datepicker__day--outside-month {
+  color: #64748b !important;
+}
+
+/* Disabled Days */
+
+.react-datepicker__day--disabled {
+  color: #475569 !important;
+}
+
+/* Triangle Arrow */
+
+.react-datepicker__triangle {
+  display: none;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
 }
