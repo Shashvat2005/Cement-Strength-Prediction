@@ -1,5 +1,6 @@
 'use client';
 
+import Navbar from '@/components/layouts/Navbar';
 import Hero from '@/components/sections/Hero';
 import PredictionForm from '@/components/sections/PredictionForm';
 import ResultCard from '@/components/sections/ResultCard';

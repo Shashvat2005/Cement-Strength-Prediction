@@ -78,10 +78,24 @@ export default function PredictionForm({
     try {
       setLoading(true);
 
-      const data = await predict(formData);
+      const payload = {
+        date: formData.date,
+        plant: Number(formData.plant),
+        blaine: Number(formData.blaine),
+        residue90: Number(formData.residue90),
+        residue45: Number(formData.residue45),
+        loi: Number(formData.loi),
+        so3: Number(formData.so3),
+        c3s: Number(formData.c3s),
+        c2s: Number(formData.c2s),
+        twoDays: Number(formData.twoDays),
+        sevenDays: Number(formData.sevenDays),
+      };
 
+      const data = await predict(payload);
+      console.log(data);
       setPrediction(
-        data.predicted_strength
+        data.prediction
       );
     } catch (error) {
       console.error(error);
@@ -92,15 +106,15 @@ export default function PredictionForm({
 
   const fields = [
     ['plant', 'Plant ID', 'number'],
-    ['blaine', 'Blaine', 'number'],
-    ['residue90', 'Residue 90', 'number'],
-    ['residue45', 'Residue 45', 'number'],
-    ['loi', 'L0I', 'number'],
-    ['so3', 'SO3', 'number'],
-    ['c3s', 'C3S', 'number'],
-    ['c2s', 'C2S', 'number'],
-    ['twoDays', '2 Days', 'number'],
-    ['sevenDays', '7 Days', 'number'],
+    ['blaine', 'Blaine', 'number', 'cm2/gm'],
+    ['residue90', 'Residue 90', 'number', '%'],
+    ['residue45', 'Residue 45', 'number', '%'],
+    ['loi', 'L0I', 'number','%'],
+    ['so3', 'SO3', 'number','%'],
+    ['c3s', 'C3S', 'number','%'],
+    ['c2s', 'C2S', 'number','%'],
+    ['twoDays', '2 Days Strength', 'number', 'MPa'],
+    ['sevenDays', '7 Days Strength', 'number', 'MPa'],
   ];
 
   return (
@@ -114,9 +128,11 @@ export default function PredictionForm({
         className="form-grid"
       >
         <div className="input-group">
-          <label>Date</label>
+            <div className="label-row">
+              <label htmlFor="date" className="field-label">Date</label>
+            </div>
 
-          <DatePicker
+          <DatePicker 
             selected={selectedDate}
             onChange={handleDateChange}
 
@@ -135,26 +151,23 @@ export default function PredictionForm({
         </div>
 
         {fields.map(
-          ([name, label, type]) => (
-            <div
-              key={name}
-              className="input-group"
-            >
-              <label>{label}</label>
+          ([name, label, type, unit]) => (
+            <div key={name} className="input-group">
+              <div className="label-row">
+                <label htmlFor={String(name)} className="field-label">
+                  {label}
+                  {unit && <span className="field-unit">, {unit}</span>}
+                </label>
+              </div>
 
               <input
+                id={String(name)}
                 name={name}
                 type={type}
                 step="any"
                 required
-                value={
-                  formData[
-                    name as keyof FormData
-                  ]
-                }
-                onChange={
-                  handleInputChange
-                }
+                value={formData[name as keyof FormData]}
+                onChange={handleInputChange}
               />
             </div>
           )
