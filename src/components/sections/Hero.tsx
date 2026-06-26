@@ -30,7 +30,7 @@ export default function Hero() {
             {/* H1 and P are styled to stay inline with each other if needed, 
                 or just sit tightly packed next to the image */}
             <h1 style={{ margin: 0, fontSize: '1.5rem', lineHeight: '1.2' }}>
-              Cement Strength Predictor
+              Cement Strength Prediction
             </h1>
             <p style={{ margin: '4px 0 0 0', fontSize: '0.95rem', color: '#white' }}>
               Star Cement Co. LLC, UAE
