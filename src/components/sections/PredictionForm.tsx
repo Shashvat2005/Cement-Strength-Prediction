@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { predict } from '@/lib/api';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { CalendarDays } from 'lucide-react';
 
 interface PredictionFormProps {
   setPrediction: (value: number) => void;
@@ -23,10 +24,19 @@ interface FormData {
   sevenDays: string;
 }
 
+interface FieldConfig {
+  name: keyof FormData;
+  label: string;
+  type: string;
+  unit?: string;
+  isDate?: boolean;
+}
+
 export default function PredictionForm({
   setPrediction,
 }: PredictionFormProps) {
   const [loading, setLoading] = useState(false);
+  const [predictedStrength, setPredictedStrength] = useState<number | null>(null);
 
   const [selectedDate, setSelectedDate] =
     useState<Date | null>(null);
@@ -34,7 +44,7 @@ export default function PredictionForm({
   const [formData, setFormData] =
     useState<FormData>({
       date: '',
-      plant: '',
+      plant: 'ACI',
       blaine: '',
       residue90: '',
       residue45: '',
@@ -47,10 +57,10 @@ export default function PredictionForm({
     });
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-
+    // console.log(name, value);
     setFormData((prev) => ({
       ...prev,
       [name]: value,
@@ -80,7 +90,7 @@ export default function PredictionForm({
 
       const payload = {
         date: formData.date,
-        plant: Number(formData.plant),
+        plant: formData.plant,
         blaine: Number(formData.blaine),
         residue90: Number(formData.residue90),
         residue45: Number(formData.residue45),
@@ -91,12 +101,12 @@ export default function PredictionForm({
         twoDays: Number(formData.twoDays),
         sevenDays: Number(formData.sevenDays),
       };
-
+      // console.log(payload);
       const data = await predict(payload);
-      console.log(data);
-      setPrediction(
-        data.prediction
-      );
+      // console.log(data);
+      const nextPrediction = Number(data.prediction);
+      setPrediction(nextPrediction);
+      setPredictedStrength(nextPrediction);
     } catch (error) {
       console.error(error);
     } finally {
@@ -104,84 +114,186 @@ export default function PredictionForm({
     }
   }
 
-  const fields = [
-    ['plant', 'Plant ID', 'number'],
-    ['blaine', 'Blaine', 'number', 'cm2/gm'],
-    ['residue90', 'Residue 90', 'number', '%'],
-    ['residue45', 'Residue 45', 'number', '%'],
-    ['loi', 'L0I', 'number','%'],
-    ['so3', 'SO3', 'number','%'],
-    ['c3s', 'C3S', 'number','%'],
-    ['c2s', 'C2S', 'number','%'],
-    ['twoDays', '2 Days Strength', 'number', 'MPa'],
-    ['sevenDays', '7 Days Strength', 'number', 'MPa'],
+  const rowOneFields: FieldConfig[] = [
+    { name: 'date', label: 'Date', type: 'date', isDate: true },
+    { name: 'plant', label: 'Plant', type: 'number' },
+  ];
+
+  const rowTwoFields: FieldConfig[] = [
+    { name: 'blaine', label: 'Blaine', type: 'number', unit: 'Cm²/g' },
+    { name: 'residue90', label: 'Residue +90μ', type: 'number', unit: '%' },
+    { name: 'residue45', label: 'Residue +45μ', type: 'number', unit: '%' },
+  ];
+
+  const rowThreeFields: FieldConfig[] = [
+    { name: 'loi', label: 'LOI', type: 'number', unit: '%' },
+    { name: 'so3', label: 'SO₃', type: 'number', unit: '%' },
+    { name: 'c2s', label: 'C₂S', type: 'number', unit: '%' },
+    { name: 'c3s', label: 'C₃S', type: 'number', unit: '%' },
+  ];
+
+  const rowFourFields: FieldConfig[] = [
+    { name: 'twoDays', label: '2 Days Strength', type: 'number', unit: 'MPa' },
+    { name: 'sevenDays', label: '7 Days Strength', type: 'number', unit: 'MPa' },
+    // { name: 'sevenDays', label: 'Click here to Generate 28 Days Cement Compressive Strength', type: 'number', unit: 'MPa' },
   ];
 
   return (
     <div className="main-card">
       <div className="card-header">
-        INPUT PARAMETERS
+        Instantaneous Result
       </div>
 
-      <form
-        onSubmit={handlePredict}
-        className="form-grid"
-      >
-        <div className="input-group">
-            <div className="label-row">
-              <label htmlFor="date" className="field-label">Date</label>
+      <form onSubmit={handlePredict} className="form-grid">
+        <div className="form-row form-row-2">
+          {rowOneFields.map((field) => (
+            <div key={field.name} className="input-group">
+              <div className="label-row">
+                <label htmlFor={field.name} className="field-label">
+                  {field.label}
+                  {!field.isDate && field.unit && <span className="field-unit">, {field.unit}</span>}
+                </label>
+              </div>
+
+              {field.isDate ? (
+                <div className="date-picker-wrapper">
+                  <DatePicker
+                    selected={selectedDate}
+                    onChange={handleDateChange}
+                    dateFormat="dd/MM/yyyy"
+                    showMonthDropdown
+                    showYearDropdown
+                    scrollableYearDropdown
+                    yearDropdownItemNumber={15}
+                    dropdownMode="select"
+                    className="date-picker"
+                    placeholderText="Select date"
+                  />
+                  <CalendarDays className="date-picker-icon" size={16} />
+                </div>
+              ) : field.name === 'plant' ? (
+                <select
+                  id={field.name}
+                  name={field.name}
+                  required
+                  value={formData[field.name as keyof FormData]}
+                  onChange={handleInputChange}
+                  className = 'select_plant'
+                >
+                  <option value="ACI">Arabian Cement Industries, Abu Dhabi</option>
+                  <option value="ACF">Ajman Cement Factory, Ajman</option>
+                  <option value="SSCI">Star Super Cement Industries, Dubai</option>
+                  <option value="AGCC">Arabian Gulf Cement Company, Bahrain</option>
+                </select>
+              ) : (
+                <input
+                  id={field.name}
+                  name={field.name}
+                  type={field.type}
+                  step="any"
+                  required
+                  value={formData[field.name as keyof FormData]}
+                  onChange={handleInputChange}
+                />
+              )}
             </div>
-
-          <DatePicker 
-            selected={selectedDate}
-            onChange={handleDateChange}
-
-            dateFormat="dd/MM/yyyy"
-
-            showMonthDropdown
-            showYearDropdown
-
-            scrollableYearDropdown
-            yearDropdownItemNumber={15}
-
-            dropdownMode="select"
-
-            className="date-picker"
-          />
+          ))}
         </div>
 
-        {fields.map(
-          ([name, label, type, unit]) => (
-            <div key={name} className="input-group">
+        <div className="form-row form-row-3">
+          {rowTwoFields.map((field) => (
+            <div key={field.name} className="input-group">
               <div className="label-row">
-                <label htmlFor={String(name)} className="field-label">
-                  {label}
-                  {unit && <span className="field-unit">, {unit}</span>}
+                <label htmlFor={field.name} className="field-label">
+                  {field.label}
+                  {field.unit && <span className="field-unit">, {field.unit}</span>}
                 </label>
               </div>
 
               <input
-                id={String(name)}
-                name={name}
-                type={type}
+                id={field.name}
+                name={field.name}
+                type={field.type}
                 step="any"
                 required
-                value={formData[name as keyof FormData]}
+                value={formData[field.name as keyof FormData]}
                 onChange={handleInputChange}
               />
             </div>
-          )
-        )}
+          ))}
+        </div>
 
-        <button
-          type="submit"
-          className="predict-btn"
-          disabled={loading}
-        >
-          {loading
-            ? 'Predicting...'
-            : 'Predict Strength'}
-        </button>
+        <div className="form-row form-row-4">
+          {rowThreeFields.map((field) => (
+            <div key={field.name} className="input-group">
+              <div className="label-row">
+                <label htmlFor={field.name} className="field-label">
+                  {field.label}
+                  {field.unit && <span className="field-unit">, {field.unit}</span>}
+                </label>
+              </div>
+
+              <input
+                id={field.name}
+                name={field.name}
+                type={field.type}
+                step="any"
+                required
+                value={formData[field.name as keyof FormData]}
+                onChange={handleInputChange}
+              />
+            </div>
+          ))}
+        </div>
+
+        <div className="form-row form-row-2-actions">
+          {rowFourFields.map((field) => (
+            <div key={field.name} className="input-group">
+              <div className="label-row">
+                <label htmlFor={field.name} className="field-label">
+                  {field.label}
+                  {field.unit && <span className="field-unit">, {field.unit}</span>}
+                </label>
+              </div>
+
+              <input
+                id={field.name}
+                name={field.name}
+                type={field.type}
+                step="any"
+                required
+                value={formData[field.name as keyof FormData]}
+                onChange={handleInputChange}
+              />
+            </div>
+          ))}
+
+          {/* <button type="submit" className="predict-btn" disabled={loading}>
+            {loading ? 'Predicting...' : 'Predicted 28 Days Compressive Strength, MPa'}
+          </button> */}
+        </div>
+
+        <div className='label-row'>
+            <button
+              type="submit"
+              className="predict-trigger"
+              disabled={loading}
+            >
+              Click here to Generate 28 Days Cement Compressive Strength, MPa
+              {/* <span className='predict-trigger'>, MPa</span> */}
+            </button>
+        </div>
+
+        <div className="prediction-display">
+          <span className="prediction-value">
+            {predictedStrength !== null
+              ? `${predictedStrength.toFixed(2)} MPa`
+              : loading
+                ? 'Predicting...'
+                : ''}
+          </span>
+        </div>
+
       </form>
     </div>
   );

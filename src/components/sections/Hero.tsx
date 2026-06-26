@@ -32,8 +32,11 @@ export default function Hero() {
             <h1 style={{ margin: 0, fontSize: '1.5rem', lineHeight: '1.2' }}>
               Cement Strength Predictor
             </h1>
-            <p style={{ margin: '4px 0 0 0', fontSize: '0.95rem', color: '#555' }}>
-              — Predict 28-Day Cement Strength using process quality parameters
+            <p style={{ margin: '4px 0 0 0', fontSize: '0.95rem', color: '#white' }}>
+              Star Cement Co. LLC, UAE
+            </p>
+            <p style={{ margin: '4px 0 0 0', fontSize: '0.95rem', color: '#white' }}>
+              Predict 28-Days Cement Compressive Strength using cement quality parameters
             </p>
           </div>
 

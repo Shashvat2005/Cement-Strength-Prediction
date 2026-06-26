@@ -25,7 +25,7 @@ body {
 
 .dashboard {
   min-height: 100vh;
-  padding: 50px 20px;
+  padding: 10px 5px;
 }
 
 .dashboard-container {
@@ -53,7 +53,7 @@ body {
 
 .hero .hero-content {
   font-size: 0.95rem;
-  color: #555;
+  color: #ffffff;
   max-width: 700px;
 }
 
@@ -63,19 +63,40 @@ body {
   justify-content: flex-start;
   align-items: center;
   gap: 8px;
-  margin-bottom: 8px;
+  margin-bottom: 2px;
+}
+
+.predict-trigger {
+  border: none;
+  background: transparent;
+  padding: 0;
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.predict-trigger:hover:not(:disabled) {
+  color: #2EC2B3;
+}
+
+.predict-trigger:disabled {
+  cursor: wait;
+  opacity: 0.7;
 }
 
 .label-row .field-label {
-  font-size: 0.95rem;
+  font-size: 0.8rem;
   letter-spacing: 1px;
-  color: #94a3b8;
+  color: #ffffff;
   font-weight: 700;
 }
 
 .label-row .field-unit {
   font-size: 0.8rem;
-  color: var(--muted);
+  color: #ffffff;
   font-weight: 600;
 }
 
@@ -83,7 +104,7 @@ body {
   font-size: 2.5rem;
   font-weight: 800;
   line-height: 1;
-  margin-bottom: 12px;
+  margin-bottom: 5px;
 }
 
 .hero p {
@@ -96,7 +117,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 40px;
+  margin-bottom: 10px;
 }
 
 /* ensure back button doesn't add extra bottom spacing when inline */
@@ -128,6 +149,12 @@ body {
   align-items: start;
 }
 
+.dashboard-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
 .main-card,
 .prediction-card {
   background: var(--card);
@@ -137,43 +164,78 @@ body {
 }
 
 .main-card {
-  padding: 40px;
+  /* width: min(100%, 920px); */
+  width:fit-content;
+  margin: 0 auto;
+  padding: 20px 20px;
 }
 
 .card-header {
-  font-size: 0.8rem;
-  letter-spacing: 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  margin: 0 auto 14px auto;
+  font-size: 0.95rem;
+  letter-spacing: 1.5px;
   font-weight: 700;
   text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 28px;
-  padding-bottom: 12px;
-  border-bottom: 2px solid rgba(46, 196, 182, 0.25);
+  color: #ffffff;
+  margin-bottom: 14px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
 }
 
 .form-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 28px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+.form-row-2 {
+  gap: 12px;
+}
+
+.form-row-2 .input-group {
+  flex: 1 1 0;
+}
+
+.form-row-4,
+.form-row-3,
+.form-row-2-actions {
+  gap: 10px;
 }
 
 .input-group {
   display: flex;
   flex-direction: column;
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 180px;
 }
 
 .input-group label {
   font-size: 0.85rem;
   letter-spacing: 1px;
   color: #94a3b8;
-  margin-bottom: 8px;
+  margin-bottom: 0;
 }
 
-.input-group input {
+.input-group input,
+.input-group select {
   background: #0b1119;
   border: 1px solid var(--border);
   border-radius: 10px;
-  padding: 12px 14px;
+  padding: 0 12px;
   color: var(--text);
   font-size: 0.95rem;
   transition: border-color 0.15s ease;
@@ -181,42 +243,69 @@ body {
 }
 
 .input-group input,
+.input-group select,
 .date-picker {
-  height: 58px;
+  height: 44px;
 }
 
-.input-group input:focus {
+.date-picker-wrapper {
+  position: relative;
+}
+
+.date-picker {
+  width: 100%;
+  padding-right: 40px;
+}
+
+.date-picker-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+.input-group input::placeholder,
+.date-picker::placeholder {
+  color: #ffffff;
+  opacity: 1;
+}
+
+.input-group input:focus,
+.input-group select:focus {
   border-color: var(--accent);
   box-shadow: 0 0 0 2px rgba(46, 196, 182, 0.2);  /* light focus ring */
 }
 
-.predict-btn {
-  width: 320px;
-
-  height: 56px;
-
-  margin: 24px auto 0;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  gap: 10px;
-
-  background: #16d4c3;
-
-  color: black;
-
-  font-weight: 800;
-
-  border-radius: 14px;
+.input-group select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, #94a3b8 50%), linear-gradient(135deg, #94a3b8 50%, transparent 50%);
+  background-position: calc(100% - 18px) calc(50% - 2px), calc(100% - 12px) calc(50% - 2px);
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+  padding-right: 36px;
 }
 
-.predict-btn:hover {
-  background: #25b0a3;           /* slightly darker shade, no glow */
-  transform: translateY(-1px);
+.prediction-display {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  border: 1px solid rgba(46, 196, 182, 0.25);
+  border-radius: 10px;
+  background: rgba(11, 17, 25, 0.8);
+  height: 44px;
+  width: 490px;
+  margin-top: 0;
+}
+
+.prediction-display .prediction-value {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #2ec4b6;
 }
 
 .prediction-card {
@@ -248,18 +337,52 @@ body {
   font-weight: 500;
 }
 
+.select_plant{
+  width: fit-content;
+}
+
+.predict-btn {
+  width: 100%;
+  display: block;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-top: 18px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+
+.predict-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
+}
+
+.predict-btn:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
 /* Responsive */
 @media (max-width: 900px) {
   .dashboard-grid {
     grid-template-columns: 1fr;
   }
 
-  .form-grid {
+  .form-row-4,
+  .form-row-3,
+  .form-row-2,
+  .form-row-2-actions {
     grid-template-columns: 1fr;
   }
 
   .predict-btn {
-    grid-column: span 1;
+    max-width: 100%;
   }
 
   .prediction-value {
@@ -559,8 +682,6 @@ input[type="number"] {
 
   color: #94a3b8;
 
-  text-transform: uppercase;
-
   font-size: 0.7rem;
 
   letter-spacing: 1px;
@@ -664,7 +785,7 @@ input[type="number"] {
 }
 
 .prediction-cell {
-  color: #16d4c3;
+  color: #f6ff00;
 
   font-weight: 700;
 

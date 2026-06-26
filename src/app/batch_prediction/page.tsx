@@ -15,6 +15,7 @@ export default function BatchPredictPage() {
   const router = useRouter()
 
   const [rawInput, setRawInput] = useState("");
+  const [plant, setPlant] = useState("ACI");
 
   const [status, setStatus] = useState<{
     type: "idle" | "loading" | "success" | "error";
@@ -27,15 +28,21 @@ export default function BatchPredictPage() {
   useState<BatchPredictionResult[]>([]);
   async function handleBatchPrediction() {
     if (!rawInput.trim()) return;
-
+    
     try {
       setStatus({
         type: "loading",
         message: "Processing...",
       });
 
+      console.log({
+        raw_data: rawInput,
+        plant,
+      });
+
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/batch_predict`,
+        // `${process.env.NEXT_PUBLIC_API_URL}/batch_predict`,
+        `http://localhost:8000/batch_predict`,
         {
           method: "POST",
           headers: {
@@ -44,11 +51,15 @@ export default function BatchPredictPage() {
           },
           body: JSON.stringify({
             raw_data: rawInput,
+            plant: plant,
           }),
         }
       );
 
+      console.log(response);
+
       if (!response.ok) {
+        console.log(await response.text());
         throw new Error(
           "Prediction failed"
         );
@@ -89,9 +100,7 @@ export default function BatchPredictPage() {
             <h1 className="hero-title">Batch Prediction</h1>
 
             <p className='hero-content'>
-              Paste rows copied from the
-              Plant Performance Sheet
-              and generate predictions instantly.
+              Copy and Paste the cement quality data altogether of single or several days
             </p>
           </div>
 
@@ -113,6 +122,30 @@ export default function BatchPredictPage() {
           
         </div>
 
+        {/* <div className="form-row form-row-2"> */}
+          <div className="input-group">
+            <div className = "label-row">
+              <label className="field-label">
+                Select Plant
+              </label>
+            </div>
+            
+            <select
+              id={"Plant"}
+              name={"Plant"}
+              required
+              value={plant}
+              onChange={(e) => setPlant(e.target.value)}
+              className = 'select_plant'
+            >
+              <option value="ACI">Arabian Cement Industries, Abu Dhabi</option>
+              <option value="ACF">Ajman Cement Factory, Ajman</option>
+              <option value="SSCI">Star Super Cement Industries, Dubai</option>
+              <option value="AGCC">Arabian Gulf Cement Company, Bahrain</option>
+            </select>
+          </div>
+        {/* </div> */}
+
         <div className="batch-card">
 
           <div className="batch-card-header">
@@ -121,7 +154,7 @@ export default function BatchPredictPage() {
           </div>
 
           <textarea
-            placeholder="Date, Plant,	Blaine,	Residue 90,	Residue 45,	L0I,	SO3,	C3S,	C2S,	2 Days Strength,	7 Days Strength"
+            placeholder="Copy and Paste Data from .xls file in the format: Date, Blaine,	Residue +90μ,	Residue +45μ,	LOI,	SO₃,	C₃S,	C₂S,	2 Days Strength,	7 Days Strength"
             className="batch-input"
             value={rawInput}
             onChange={(e) =>
@@ -134,11 +167,9 @@ export default function BatchPredictPage() {
             disabled={status.type === "loading"}
             className="predict-btn"
           >
-            <CloudLightning size={18} />
-
             {status.type === "loading"
               ? "Processing..."
-              : "Generate Predictions"}
+              : "Click here to Generate 28 Days Cement Compressive Strength"}
           </button>
 
         </div>
@@ -157,16 +188,16 @@ export default function BatchPredictPage() {
           <tr>
             <th>Date</th>
             <th>Plant</th>
-            <th>Blaine</th>
-            <th>R90</th>
-            <th>R45</th>
-            <th>LOI</th>
-            <th>SO3</th>
-            <th>C3S</th>
-            <th>C2S</th>
-            <th>2D</th>
-            <th>7D</th>
-            <th>28D</th>
+            <th>Blaine, Cm²/g</th>
+            <th>R+90μ, %</th>
+            <th>R+45μ, %</th>
+            <th>LOI, %</th>
+            <th>SO₃, %</th>
+            <th>C₃S, %</th>
+            <th>C₂S, %</th>
+            <th>2D, MPa</th>
+            <th>7D, MPa</th>
+            <th>28D, MPa</th>
           </tr>
         </thead>
 
