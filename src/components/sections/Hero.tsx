@@ -46,7 +46,7 @@ export default function Hero() {
           href="/batch_prediction"
           className="batch-btn"
         >
-          Batch Prediction
+          Multiple Dates Result
         </Link>
       </div>
     </section>

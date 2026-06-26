@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { predict } from '@/lib/api';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { CalendarDays } from 'lucide-react';
+import { CalendarDays, Link } from 'lucide-react';
 
 interface PredictionFormProps {
   setPrediction: (value: number) => void;
@@ -139,9 +139,12 @@ export default function PredictionForm({
   ];
 
   return (
+    <div>
+      
+
     <div className="main-card">
       <div className="card-header">
-        Instantaneous Result
+        Single Date Result
       </div>
 
       <form onSubmit={handlePredict} className="form-grid">
@@ -295,6 +298,13 @@ export default function PredictionForm({
         </div>
 
       </form>
+    </div>
+    {/* <Link
+        href="/batch_prediction"
+        className="batch-btn"
+      >
+        Multiple Dates Result
+      </Link> */}
     </div>
   );
 }

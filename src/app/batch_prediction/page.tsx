@@ -97,7 +97,7 @@ export default function BatchPredictPage() {
           
           
           <div className="hero">
-            <h1 className="hero-title">Batch Prediction</h1>
+            <h1 className="hero-title">Multiple Dates Result</h1>
 
             <p className='hero-content'>
               Copy and Paste the cement quality data altogether of single or several days
@@ -187,7 +187,7 @@ export default function BatchPredictPage() {
         <thead>
           <tr>
             <th>Date</th>
-            <th>Plant</th>
+            {/* <th>Plant</th> */}
             <th>Blaine, Cm²/g</th>
             <th>R+90μ, %</th>
             <th>R+45μ, %</th>
@@ -205,7 +205,7 @@ export default function BatchPredictPage() {
           {results.map((row, index) => (
             <tr key={index}>
               <td>{row.date}</td>
-              <td>{row.plant}</td>
+              {/* <td>{row.plant}</td> */}
               <td>{row.blaine}</td>
               <td>{row.residue90}</td>
               <td>{row.residue45}</td>

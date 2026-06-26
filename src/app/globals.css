@@ -168,6 +168,7 @@ body {
   width:fit-content;
   margin: 0 auto;
   padding: 20px 20px;
+  /* align-items: end; */
 }
 
 .card-header {
@@ -638,7 +639,7 @@ input[type="number"] {
 .results-card {
   margin-top: 30px;
 
-  background: #071734;
+  background: #111B27;
 
   border: 1px solid #17345d;
 
@@ -659,6 +660,9 @@ input[type="number"] {
 
 .table-wrapper {
   width: 100%;
+  background: #0B1119;
+  border-radius: 8px;   /* Adjust as desired */
+  overflow: hidden;
 }
 
 .results-table {
@@ -667,6 +671,7 @@ input[type="number"] {
   border-collapse: collapse;
 
   table-layout: fixed;
+
 }
 
 .results-table thead {
@@ -678,7 +683,7 @@ input[type="number"] {
 }
 
 .results-table th {
-  background: #0B1119;
+  /* background: #0B1119; */
 
   color: #94a3b8;
 
@@ -706,7 +711,7 @@ input[type="number"] {
 
 .results-table tr:hover {
   background:
-    rgba(22, 212, 195, 0.05);
+    rgba(22, 255, 236, 0.131);
 }
 
 .batch-card {
