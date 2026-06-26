@@ -41,8 +41,8 @@ export default function BatchPredictPage() {
       });
 
       const response = await fetch(
-        // `${process.env.NEXT_PUBLIC_API_URL}/batch_predict`,
-        `http://localhost:8000/batch_predict`,
+        `${process.env.NEXT_PUBLIC_API_URL}/batch_predict`,
+        // `http://localhost:8000/batch_predict`,
         {
           method: "POST",
           headers: {
